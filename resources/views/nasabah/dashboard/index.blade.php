@@ -1,102 +1,78 @@
-@extends('layouts.nasabah')
+﻿@extends('layouts.nasabah')
 @section('title','Dashboard Saya')
 
 @section('content')
-<!-- Saldo card -->
-<div class="saldo-card mb-4">
-  <div style="font-size:13px;opacity:.8;margin-bottom:6px">
-    <i class="bi bi-person-circle me-1"></i>
-    {{ $nasabah->user->name }}
-  </div>
-  <div style="font-size:13px;opacity:.7;margin-bottom:4px">Saldo Tabungan Sampah</div>
-  <div style="font-size:36px;font-weight:800;letter-spacing:-1px">
+@php
+  $penarikanMenunggu = $nasabah->penarikanDana()->where('status','menunggu')->first();
+  $btn = 'display:flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;font-size:13px;font-weight:600;padding:11px 12px;text-decoration:none;';
+@endphp
+
+<!-- Saldo -->
+<div class="saldo-card mb-3">
+  <div style="font-size:13px;opacity:.85">Halo, {{ \Illuminate\Support\Str::words($nasabah->user->name, 2, '') }} 👋</div>
+  <div style="font-size:12px;opacity:.7;margin-top:14px">Saldo Tabungan Sampah</div>
+  <div style="font-size:clamp(30px,9vw,40px);font-weight:800;letter-spacing:-1px;line-height:1.1">
     Rp {{ number_format($nasabah->saldo, 0, ',', '.') }}
   </div>
-  <div style="font-size:11px;opacity:.6;margin-top:8px">
-    Terakhir diperbarui: {{ now()->format('d M Y, H:i') }}
-  </div>
-  @php
-    $penarikanMenunggu = $nasabah->penarikanDana()->where('status','menunggu')->first();
-  @endphp
-  <div class="mt-3 d-flex gap-2 flex-wrap">
+  <div style="font-size:11px;opacity:.6;margin-top:8px">Diperbarui {{ now()->format('d M Y, H:i') }}</div>
+  <div class="d-flex gap-2 mt-3">
     @if($penarikanMenunggu)
-      <a href="{{ route('nasabah.penarikan.index') }}"
-         style="background:rgba(255,255,255,.2);color:#fff;border-radius:8px;font-size:12px;padding:7px 14px;text-decoration:none;border:1px solid rgba(255,255,255,.3)">
-        <i class="bi bi-hourglass-split me-1"></i>
-        Menunggu: Rp {{ number_format($penarikanMenunggu->jumlah, 0, ',', '.') }}
+      <a href="{{ route('nasabah.penarikan.index') }}" class="flex-fill" style="{{ $btn }}background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.3)">
+        <i class="bi bi-hourglass-split"></i> Menunggu Rp {{ number_format($penarikanMenunggu->jumlah, 0, ',', '.') }}
       </a>
     @else
-      <a href="{{ route('nasabah.penarikan.create') }}"
-         style="background:rgba(255,255,255,.2);color:#fff;border-radius:8px;font-size:12px;padding:7px 14px;text-decoration:none;border:1px solid rgba(255,255,255,.3)">
-        <i class="bi bi-cash-stack me-1"></i>Ajukan Penarikan
+      <a href="{{ route('nasabah.penarikan.create') }}" class="flex-fill" style="{{ $btn }}background:#fff;color:#166534">
+        <i class="bi bi-cash-stack"></i> Ajukan Penarikan
       </a>
     @endif
-    <a href="{{ route('nasabah.penarikan.index') }}"
-       style="background:transparent;color:rgba(255,255,255,.75);border-radius:8px;font-size:12px;padding:7px 14px;text-decoration:none">
-      Riwayat Penarikan →
+    <a href="{{ route('nasabah.penarikan.index') }}" style="{{ $btn }}background:rgba(255,255,255,.15);color:#fff" aria-label="Riwayat penarikan">
+      <i class="bi bi-receipt"></i> Riwayat
     </a>
   </div>
 </div>
 
-<!-- Stat cards -->
-<div class="row g-3 mb-4">
-  <div class="col-sm-4">
-    <div class="stat-card text-center">
-      <div style="font-size:28px">🔄</div>
-      <div style="font-size:22px;font-weight:700;color:#0f172a">{{ $totalTransaksi }}</div>
-      <div style="font-size:12px;color:#64748b">Total Setoran</div>
+<!-- Stat -->
+<div class="row g-2 mb-4">
+  @foreach([
+    ['bi-arrow-repeat','#dcfce7','#16a34a',$totalTransaksi,'Setoran'],
+    ['bi-speedometer2','#dbeafe','#2563eb',number_format($totalBerat,1).' kg','Total Berat'],
+    ['bi-trophy','#fef3c7','#d97706',$ranking ? '#'.$ranking : '-','Rank Bulan Ini'],
+  ] as [$ic,$bg,$fg,$val,$lbl])
+  <div class="col-4">
+    <div class="stat-card text-center h-100" style="padding:14px 6px">
+      <div style="width:38px;height:38px;border-radius:12px;background:{{ $bg }};color:{{ $fg }};display:grid;place-items:center;margin:0 auto 8px;font-size:18px"><i class="bi {{ $ic }}"></i></div>
+      <div style="font-size:clamp(14px,4.2vw,20px);font-weight:700">{{ $val }}</div>
+      <div style="font-size:11px;color:#64748b">{{ $lbl }}</div>
     </div>
   </div>
-  <div class="col-sm-4">
-    <div class="stat-card text-center">
-      <div style="font-size:28px">⚖️</div>
-      <div style="font-size:22px;font-weight:700;color:#0f172a">{{ number_format($totalBerat, 1) }} kg</div>
-      <div style="font-size:12px;color:#64748b">Total Berat Sampah</div>
-    </div>
-  </div>
-  <div class="col-sm-4">
-    <div class="stat-card text-center">
-      <div style="font-size:28px">🏆</div>
-      <div style="font-size:22px;font-weight:700;color:#0f172a">{{ $ranking ? '#'.$ranking : '-' }}</div>
-      <div style="font-size:12px;color:#64748b">Ranking Bulan Ini</div>
-    </div>
-  </div>
+  @endforeach
 </div>
 
-<!-- 5 transaksi terbaru -->
-<div class="table-card">
-  <div style="padding:14px 20px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center">
-    <span style="font-size:14px;font-weight:600">Riwayat Setoran Terakhir</span>
-    <a href="{{ route('nasabah.riwayat') }}" style="font-size:12px;color:#16a34a">Lihat semua →</a>
+<!-- Setoran terakhir -->
+<div class="d-flex justify-content-between align-items-center mb-2 px-1">
+  <span style="font-size:15px;font-weight:700">Setoran Terakhir</span>
+  <a href="{{ route('nasabah.riwayat') }}" style="font-size:12px;color:#16a34a;text-decoration:none">Lihat semua →</a>
+</div>
+<div class="d-grid gap-2">
+  @forelse($transaksiTerbaru as $t)
+  <div class="stat-card" style="padding:14px">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+      <div style="font-size:12px;color:#64748b"><i class="bi bi-calendar3 me-1"></i>{{ $t->tanggal->format('d M Y') }}</div>
+      <div style="font-weight:700;color:#16a34a;font-size:15px;white-space:nowrap">+ Rp {{ number_format($t->total_nilai, 0, ',', '.') }}</div>
+    </div>
+    <div class="mt-2 d-flex flex-wrap gap-1">
+      @foreach($t->detail as $d)
+        <span class="badge" style="background:#dcfce7;color:#15803d;font-size:11px;font-weight:500">
+          {{ $d->kategori->nama_kategori }} · {{ number_format($d->berat_kg,2) }}kg
+        </span>
+      @endforeach
+    </div>
   </div>
-  <div class="table-responsive">
-    <table class="table mb-0">
-      <thead>
-        <tr><th>Tanggal</th><th>Jenis Sampah</th><th>Nilai</th></tr>
-      </thead>
-      <tbody>
-        @forelse($transaksiTerbaru as $t)
-        <tr>
-          <td style="font-size:13px">{{ $t->tanggal->format('d M Y') }}</td>
-          <td>
-            @foreach($t->detail as $d)
-              <span class="badge me-1"
-                    style="background:#dcfce7;color:#15803d;font-size:11px">
-                {{ $d->kategori->nama_kategori }} {{ number_format($d->berat_kg,2) }}kg
-              </span>
-            @endforeach
-          </td>
-          <td style="font-weight:700;color:#16a34a;font-size:13px">
-            Rp {{ number_format($t->total_nilai, 0, ',', '.') }}
-          </td>
-        </tr>
-        @empty
-        <tr>
-          <td colspan="3" class="text-center text-muted py-3">Belum ada setoran.</td>
-        </tr>
-        @endforelse
-      </tbody>
-    </table>
+  @empty
+  <div class="stat-card text-center text-muted" style="padding:28px">
+    <i class="bi bi-recycle" style="font-size:28px;color:#86efac"></i>
+    <div class="mt-1" style="font-size:13px">Belum ada setoran.</div>
   </div>
+  @endforelse
 </div>
 @endsection
