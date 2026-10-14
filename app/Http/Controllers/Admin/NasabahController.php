@@ -9,18 +9,12 @@ use Illuminate\Support\Facades\{Hash, DB};
 class NasabahController extends Controller {
 
     public function index(Request $request) {
-        $query = Nasabah::whereHas('user', function($q) {
-            $q->where('status', 'approved')
-              ->whereNotNull('email_verified_at');
-        })->with('user');
+        $query = Nasabah::with('user');
 
         if ($request->filled('q')) {
             $search = $request->q;
-            $query->where(function($q) use ($search) {
-                $q->where('nik', 'like', "%{$search}%")
-                  ->orWhereHas('user', function($q2) use ($search) {
-                      $q2->where('name', 'like', "%{$search}%");
-                  });
+            $query->whereHas('user', function($q2) use ($search) {
+                $q2->where('name', 'like', "%{$search}%");
             });
         }
 
@@ -40,7 +34,6 @@ class NasabahController extends Controller {
         $request->validate([
             'name'    => 'required|string|max:100',
             'email'   => 'required|email|unique:users,email',
-            'nik'     => 'required|string|size:16|unique:nasabah,nik',
             'alamat'  => 'nullable|string',
             'no_hp'   => 'nullable|string|max:15',
             'password'=> 'required|min:8',
@@ -60,7 +53,6 @@ class NasabahController extends Controller {
             // 2. Buat data nasabah yang terhubung ke user
             Nasabah::create([
                 'user_id'     => $user->id,
-                'nik'         => $request->nik,
                 'alamat'      => $request->alamat,
                 'no_hp'       => $request->no_hp,
                 'saldo'       => 0,
@@ -80,14 +72,12 @@ class NasabahController extends Controller {
     public function update(Request $request, Nasabah $nasabah) {
         $request->validate([
             'name'   => 'required|string|max:100',
-            'nik'    => 'required|string|size:16|unique:nasabah,nik,'.$nasabah->id,
             'alamat' => 'nullable|string',
             'no_hp'  => 'nullable|string|max:15',
         ]);
 
         $nasabah->user->update(['name' => $request->name]);
         $nasabah->update([
-            'nik'    => $request->nik,
             'alamat' => $request->alamat,
             'no_hp'  => $request->no_hp,
         ]);

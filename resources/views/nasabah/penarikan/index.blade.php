@@ -28,7 +28,6 @@
 <div class="saldo-card mb-4" style="padding:20px 24px">
   <div style="font-size:12px;opacity:.8;margin-bottom:4px">Saldo Tabungan Saat Ini</div>
   <div style="font-size:28px;font-weight:800">Rp {{ number_format($nasabah->saldo, 0, ',', '.') }}</div>
-  <div style="font-size:11px;opacity:.65;margin-top:4px">NIK: {{ $nasabah->nik }}</div>
 </div>
 
 {{-- Tabel Riwayat --}}

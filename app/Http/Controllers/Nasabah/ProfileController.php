@@ -29,7 +29,6 @@ class ProfileController extends Controller
         }
 
         $request->validate([
-            'nik' => 'required|string|size:16|unique:nasabah,nik',
             'no_hp' => 'nullable|string|max:15',
             'alamat' => 'nullable|string',
             'password' => 'required|string|min:8|confirmed',
@@ -65,7 +64,6 @@ class ProfileController extends Controller
             // Buat profil nasabah
             Nasabah::create([
                 'user_id' => $user->id,
-                'nik'     => $request->nik,
                 'no_hp'   => $request->no_hp,
                 'alamat'  => $request->alamat,
                 'saldo'   => 0,

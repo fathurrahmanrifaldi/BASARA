@@ -30,7 +30,7 @@
           </div>
           <div>
             <div style="font-weight:700;font-size:14px">{{ $transaksi->nasabah->user->name }}</div>
-            <div style="font-size:11px;color:#94a3b8">NIK: {{ $transaksi->nasabah->nik }} &bull; Saldo: Rp {{ number_format($transaksi->nasabah->saldo, 0, ',', '.') }}</div>
+            <div style="font-size:11px;color:#94a3b8">Saldo: Rp {{ number_format($transaksi->nasabah->saldo, 0, ',', '.') }}</div>
           </div>
           <span class="badge ms-auto" style="background:#fef3c7;color:#92400e;font-size:11px">Nasabah tidak dapat diubah</span>
         </div>

@@ -20,7 +20,7 @@
       <div style="font-size:30px;font-weight:800" id="displaySaldo">
         Rp {{ number_format($nasabah->saldo, 0, ',', '.') }}
       </div>
-      <div style="font-size:11px;opacity:.65;margin-top:4px">{{ $nasabah->user->name }} · {{ $nasabah->nik }}</div>
+      <div style="font-size:11px;opacity:.65;margin-top:4px">{{ $nasabah->user->name }}</div>
     </div>
 
     {{-- Form --}}

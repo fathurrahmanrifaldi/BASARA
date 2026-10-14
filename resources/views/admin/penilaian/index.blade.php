@@ -100,7 +100,7 @@
           <th class="text-center" title="Total berat sampah selama semester">
             C2 Total Berat<br><small class="text-muted fw-normal">(kg)</small>
           </th>
-          <th class="text-center" title="Jumlah kategori sampah unik yang disetorkan">
+          <th class="text-center" title="Total jumlah jenis sampah dari seluruh detail setoran">
             C3 Keragaman<br><small class="text-muted fw-normal">(jenis)</small>
           </th>
           {{-- Skor SAW --}}
@@ -123,7 +123,6 @@
           {{-- Nasabah --}}
           <td>
             <div style="font-weight:600">{{ $h->nasabah->user->name }}</div>
-            <div style="font-size:11px;color:#94a3b8">NIK: {{ $h->nasabah->nik }}</div>
           </td>
 
           {{-- C1: Konsistensi --}}
@@ -185,6 +184,7 @@
 <div class="mt-3 p-3" style="background:#f8fafc;border-radius:8px;font-size:12px;color:#64748b;border:1px solid #e2e8f0">
   <strong>Keterangan perhitungan SAW:</strong>
   C1 dihitung dari bulan aktif setoran: 1 bulan = 15 poin, maksimal 90 poin dalam 6 bulan.
+  C3 menghitung total jumlah jenis sampah dari seluruh detail setoran, bukan hanya jenis unik.
   Normalisasi C1 memakai nilai ideal 90 poin, sedangkan C2 dan C3 memakai nilai maksimum pada periode ini.
   Skor akhir = (C1_norm x 0.50) + (C2_norm x 0.30) + (C3_norm x 0.20), ditampilkan dalam skala 0-100.
 </div>

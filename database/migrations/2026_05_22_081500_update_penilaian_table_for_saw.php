@@ -24,7 +24,7 @@ return new class extends Migration {
                   ->comment('C1: poin konsistensi, 15 poin per bulan aktif (bobot 50%)');
             $table->decimal('total_berat', 10, 3)->default(0)->change();
             $table->decimal('keragaman_kategori', 8, 4)->default(0)->after('total_berat')
-                  ->comment('C3: jumlah kategori unik (bobot 20%)');
+                  ->comment('C3: total jumlah jenis sampah dari detail setoran (bobot 20%)');
             $table->decimal('tren_pertumbuhan', 10, 4)->default(0)->after('keragaman_kategori')
                   ->comment('Kolom lama, tidak dipakai pada SAW terbaru');
 

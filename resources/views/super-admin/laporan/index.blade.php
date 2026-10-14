@@ -174,7 +174,7 @@
   <table class="table mb-0" id="tblSetoran">
     <thead>
       <tr>
-        <th>#</th><th>Nama Nasabah</th><th>NIK</th>
+        <th>#</th><th>Nama Nasabah</th>
         <th class="text-center">Jml. Setor</th>
         <th class="text-end">Total Nilai</th>
       </tr>
@@ -184,12 +184,11 @@
       <tr>
         <td style="color:#94a3b8;font-size:13px">{{ $i+1 }}</td>
         <td style="font-weight:600;font-size:13px">{{ $r->name }}</td>
-        <td style="font-size:12px;color:#64748b">{{ $r->nik }}</td>
         <td class="text-center"><span class="badge" style="background:#e0e7ff;color:#4f46e5;border-radius:20px">{{ $r->jumlah_setor }}x</span></td>
         <td class="text-end" style="font-weight:700;color:#4f46e5">Rp {{ number_format($r->total_nilai, 0, ',', '.') }}</td>
       </tr>
       @empty
-      <tr><td colspan="5" class="text-center py-4" style="color:#94a3b8">Tidak ada data setoran</td></tr>
+      <tr><td colspan="4" class="text-center py-4" style="color:#94a3b8">Tidak ada data setoran</td></tr>
       @endforelse
     </tbody>
   </table>
@@ -207,13 +206,12 @@
   </div>
   <table class="table mb-0" id="tblPenarikan">
     <thead>
-      <tr><th>Nasabah</th><th>NIK</th><th>Jenis</th><th class="text-end">Jumlah</th><th>Status</th><th>Tgl Diminta</th></tr>
+      <tr><th>Nasabah</th><th>Jenis</th><th class="text-end">Jumlah</th><th>Status</th><th>Tgl Diminta</th></tr>
     </thead>
     <tbody>
       @forelse($rekapPenarikan as $p)
       <tr>
         <td style="font-weight:600;font-size:13px">{{ $p->name }}</td>
-        <td style="font-size:12px;color:#64748b">{{ $p->nik }}</td>
         <td><span class="badge" style="background:#f1f5f9;color:#475569;border-radius:20px;font-size:10px">{{ ucfirst($p->jenis) }}</span></td>
         <td class="text-end" style="font-weight:700;font-size:13px">Rp {{ number_format($p->jumlah,0,',','.') }}</td>
         <td>
@@ -225,7 +223,7 @@
         <td style="font-size:12px;color:#64748b">{{ \Carbon\Carbon::parse($p->tanggal_diminta)->format('d M Y') }}</td>
       </tr>
       @empty
-      <tr><td colspan="6" class="text-center py-4" style="color:#94a3b8">Tidak ada data penarikan</td></tr>
+      <tr><td colspan="5" class="text-center py-4" style="color:#94a3b8">Tidak ada data penarikan</td></tr>
       @endforelse
     </tbody>
   </table>
@@ -368,8 +366,8 @@ function exportCSV() {
   };
 
   addTable('AKTIVITAS PETUGAS', 'tblAktivitas', ['Petugas','Transaksi','Total Nilai']);
-  addTable('REKAP SETORAN NASABAH', 'tblSetoran', ['No','Nasabah','NIK','Setor','Total Nilai']);
-  addTable('REKAP PENARIKAN DANA', 'tblPenarikan', ['Nasabah','NIK','Jenis','Jumlah','Status','Tanggal']);
+  addTable('REKAP SETORAN NASABAH', 'tblSetoran', ['No','Nasabah','Setor','Total Nilai']);
+  addTable('REKAP PENARIKAN DANA', 'tblPenarikan', ['Nasabah','Jenis','Jumlah','Status','Tanggal']);
   addTable('PENJUALAN KE PENGEPUL', 'tblPengepul', ['Tanggal','Petugas','Total','Catatan']);
 
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

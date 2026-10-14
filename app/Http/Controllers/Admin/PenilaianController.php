@@ -54,7 +54,7 @@ class PenilaianController extends Controller
      * Kriteria & bobot:
      *   C1 - Konsistensi setoran  : 50% -> bulan aktif x 15 poin, maksimal 90
      *   C2 - Total berat sampah   : 30% -> total kg dalam 6 bulan
-     *   C3 - Keragaman kategori   : 20% -> COUNT(DISTINCT kategori_id)
+     *   C3 - Keragaman kategori   : 20% -> total jumlah jenis sampah dari detail setoran
      *
      * Normalisasi benefit: C1 / 90, C2 / max(C2), C3 / max(C3).
      */
@@ -83,8 +83,8 @@ class PenilaianController extends Controller
                 DB::raw('COUNT(DISTINCT MONTH(transaksi.tanggal)) as bulan_aktif'),
                 // C2: total berat
                 DB::raw('SUM(detail_transaksi.berat_kg) as total_berat'),
-                // C3: keragaman kategori unik
-                DB::raw('COUNT(DISTINCT detail_transaksi.kategori_id) as keragaman_kategori')
+                // C3: total jumlah jenis sampah dari seluruh detail setoran.
+                DB::raw('COUNT(detail_transaksi.kategori_id) as keragaman_kategori')
             )
             ->get()
             ->keyBy('nasabah_id');

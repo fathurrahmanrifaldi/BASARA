@@ -216,6 +216,10 @@ body { background: #f1f5f9; }
        class="nav-link {{ request()->routeIs('super-admin.kategori.*') ? 'active' : '' }}">
       <i class="bi bi-tags"></i> Kategori Sampah
     </a>
+    <a href="{{ route('super-admin.publikasi.index') }}"
+       class="nav-link {{ request()->routeIs('super-admin.publikasi.*') ? 'active' : '' }}">
+      <i class="bi bi-newspaper"></i> Kelola Publikasi
+    </a>
 
     <div class="nav-section">Pelaporan</div>
     <a href="{{ route('super-admin.laporan.index') }}"

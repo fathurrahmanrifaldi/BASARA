@@ -415,12 +415,6 @@ class TransaksiController extends Controller {
                 $counter++;
             }
 
-            // NIK: 16 digit angka acak (tidak boleh diawali 0)
-            $nik = (string) random_int(1000000000000000, 9999999999999999);
-            while (Nasabah::where('nik', $nik)->exists()) {
-                $nik = (string) random_int(1000000000000000, 9999999999999999);
-            }
-
             $user = User::create([
                 'name'              => $nama,
                 'email'             => $email,
@@ -431,7 +425,6 @@ class TransaksiController extends Controller {
 
             Nasabah::create([
                 'user_id' => $user->id,
-                'nik'     => $nik,
                 'alamat'  => '',
                 'no_hp'   => '',
                 'saldo'   => 0,
@@ -442,7 +435,7 @@ class TransaksiController extends Controller {
 
         return $user->nasabah ?? Nasabah::firstOrCreate(
             ['user_id' => $user->id],
-            ['nik' => '', 'alamat' => '', 'no_hp' => '', 'saldo' => 0]
+            ['alamat' => '', 'no_hp' => '', 'saldo' => 0]
         );
     }
 }

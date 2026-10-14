@@ -242,7 +242,6 @@
             <tr>
               <th>No</th>
               <th>Nama Nasabah</th>
-              <th>NIK</th>
               <th class="text-center">Jml Setor</th>
               <th class="text-end">Total Nilai</th>
             </tr>
@@ -252,7 +251,6 @@
             <tr>
               <td class="text-muted">{{ $i + 1 }}</td>
               <td class="fw-semibold">{{ $r->name }}</td>
-              <td class="text-muted font-monospace" style="font-size:12px">{{ $r->nik }}</td>
               <td class="text-center">
                 <span class="badge bg-primary bg-opacity-10 text-primary fw-semibold">
                   {{ $r->jumlah_setor }}×
@@ -262,7 +260,7 @@
             </tr>
             @empty
             <tr>
-              <td colspan="5">
+              <td colspan="4">
                 <div class="empty-state">
                   <i class="bi bi-inbox d-block"></i>
                   <p>Tidak ada setoran nasabah pada periode ini</p>
@@ -352,7 +350,6 @@
             <tr>
               <th>No</th>
               <th>Nama Nasabah</th>
-              <th>NIK</th>
               <th>Jenis</th>
               <th>Tgl Diminta</th>
               <th>Tgl Cair</th>
@@ -365,7 +362,6 @@
             <tr>
               <td class="text-muted">{{ $i + 1 }}</td>
               <td class="fw-semibold">{{ $p->name }}</td>
-              <td class="text-muted font-monospace" style="font-size:12px">{{ $p->nik }}</td>
               <td>
                 <span class="jenis-badge {{ $p->jenis }}">
                   @if($p->jenis === 'segera')
@@ -396,7 +392,7 @@
             </tr>
             @empty
             <tr>
-              <td colspan="8">
+              <td colspan="7">
                 <div class="empty-state">
                   <i class="bi bi-cash-coin d-block"></i>
                   <p>Tidak ada pengajuan penarikan pada periode ini</p>
