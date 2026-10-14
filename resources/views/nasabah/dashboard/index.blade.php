@@ -6,7 +6,7 @@
 <div class="saldo-card mb-4">
   <div style="font-size:13px;opacity:.8;margin-bottom:6px">
     <i class="bi bi-person-circle me-1"></i>
-    {{ $nasabah->user->name }} · {{ $nasabah->nik }}
+    {{ $nasabah->user->name }}
   </div>
   <div style="font-size:13px;opacity:.7;margin-bottom:4px">Saldo Tabungan Sampah</div>
   <div style="font-size:36px;font-weight:800;letter-spacing:-1px">
@@ -57,8 +57,8 @@
   <div class="col-sm-4">
     <div class="stat-card text-center">
       <div style="font-size:28px">🏆</div>
-      <div style="font-size:22px;font-weight:700;color:#0f172a">{{ $predikat ?? '-' }}</div>
-      <div style="font-size:12px;color:#64748b">Predikat Bulan Ini</div>
+      <div style="font-size:22px;font-weight:700;color:#0f172a">{{ $ranking ? '#'.$ranking : '-' }}</div>
+      <div style="font-size:12px;color:#64748b">Ranking Bulan Ini</div>
     </div>
   </div>
 </div>

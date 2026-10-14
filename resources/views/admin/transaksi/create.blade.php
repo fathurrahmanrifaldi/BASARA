@@ -43,7 +43,7 @@
                   <option value="{{ $n->id }}"
                     data-saldo="{{ number_format($n->saldo, 0, ',', '.') }}"
                     {{ old('nasabah_id') == $n->id ? 'selected' : '' }}>
-                    {{ $n->user->name }} ({{ $n->nik }})
+                    {{ $n->user->name }}
                   </option>
                 @endforeach
               </select>

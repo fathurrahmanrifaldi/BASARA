@@ -7,7 +7,7 @@ class Nasabah extends Model {
 
     protected $table    = 'nasabah';
     protected $fillable = [
-        'user_id', 'nik', 'alamat', 'no_hp', 'saldo'
+        'user_id', 'alamat', 'no_hp', 'saldo'
     ];
 
     public function user() {

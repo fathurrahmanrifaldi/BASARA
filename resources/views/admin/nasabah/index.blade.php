@@ -20,7 +20,7 @@
     <h6>Daftar Nasabah</h6>
     <form class="d-flex gap-2">
       <input type="text" name="q" value="{{ request('q') }}"
-             class="form-control form-control-sm" placeholder="Cari nama / NIK..."
+             class="form-control form-control-sm" placeholder="Cari nama..."
              style="border-radius:8px;width:220px">
       <button class="btn btn-sm" style="background:#f1f5f9">
         <i class="bi bi-search"></i>
@@ -33,8 +33,7 @@
         <tr>
           <th>#</th>
           <th>Nama</th>
-          <th>NIK</th>
-          <th>No. HP</th>
+          <!-- <th>No. HP</th> -->
           <th>Saldo</th>
           <th>Bergabung</th>
           <th>Aksi</th>
@@ -48,12 +47,7 @@
             <div style="font-weight:600;font-size:13px">{{ $n->user->name }}</div>
             <div style="font-size:11px;color:#94a3b8">{{ $n->user->email }}</div>
           </td>
-          <td>
-            <span class="badge" style="background:#f1f5f9;color:#374151;font-size:12px">
-              {{ $n->nik }}
-            </span>
-          </td>
-          <td style="font-size:13px">{{ $n->no_hp }}</td>
+          <!-- <td style="font-size:13px">{{ $n->no_hp }}</td> -->
           <td>
             <span style="font-weight:600;color:#16a34a;font-size:13px">
               Rp {{ number_format($n->saldo, 0, ',', '.') }}
@@ -79,7 +73,7 @@
         </tr>
         @empty
         <tr>
-          <td colspan="7" class="text-center text-muted py-4">
+          <td colspan="5" class="text-center text-muted py-4">
             Belum ada data nasabah.
             <a href="{{ route('admin.nasabah.create') }}">Tambah sekarang</a>
           </td>
@@ -89,9 +83,43 @@
     </table>
   </div>
   @if($nasabah->hasPages())
-  <div class="d-flex justify-content-end p-3">
-    {{ $nasabah->links() }}
-  </div>
+    <div class="d-flex align-items-center justify-content-between px-3 py-2" style="border-top:1px solid #f1f5f9">
+      <div style="font-size:12px;color:#94a3b8">
+        Menampilkan {{ $nasabah->firstItem() }}–{{ $nasabah->lastItem() }} dari {{ $nasabah->total() }} nasabah
+      </div>
+      <div class="d-flex gap-1 align-items-center">
+        {{-- Prev --}}
+        @if($nasabah->onFirstPage())
+          <span class="btn btn-sm disabled" style="background:#f1f5f9;color:#cbd5e1;border-radius:7px;font-size:12px">
+            <i class="bi bi-chevron-left"></i>
+          </span>
+        @else
+          <a href="{{ $nasabah->previousPageUrl() }}" class="btn btn-sm" style="background:#f1f5f9;color:#374151;border-radius:7px;font-size:12px">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        @endif
+
+        {{-- Nomor halaman --}}
+        @foreach($nasabah->getUrlRange(1, $nasabah->lastPage()) as $page => $url)
+          @if($page == $nasabah->currentPage())
+            <span class="btn btn-sm" style="background:#16a34a;color:#fff;border-radius:7px;font-size:12px">{{ $page }}</span>
+          @else
+            <a href="{{ $url }}" class="btn btn-sm" style="background:#f1f5f9;color:#374151;border-radius:7px;font-size:12px">{{ $page }}</a>
+          @endif
+        @endforeach
+
+        {{-- Next --}}
+        @if($nasabah->hasMorePages())
+          <a href="{{ $nasabah->nextPageUrl() }}" class="btn btn-sm" style="background:#f1f5f9;color:#374151;border-radius:7px;font-size:12px">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        @else
+          <span class="btn btn-sm disabled" style="background:#f1f5f9;color:#cbd5e1;border-radius:7px;font-size:12px">
+            <i class="bi bi-chevron-right"></i>
+          </span>
+        @endif
+      </div>
+    </div>
   @endif
 </div>
 @endsection

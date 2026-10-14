@@ -32,12 +32,6 @@
                    value="{{ old('name') }}" placeholder="Nama lengkap nasabah" required>
           </div>
           <div class="mb-3">
-            <label class="form-label fw-semibold" style="font-size:13px">NIK</label>
-            <input type="text" name="nik" class="form-control"
-                   value="{{ old('nik') }}" placeholder="Nomor Induk Kependudukan (16 digit)" required oninput="validateNik(this)">
-            <small class="text-danger d-none nik-warning">NIK harus tepat 16 digit angka.</small>
-          </div>
-          <div class="mb-3">
             <label class="form-label fw-semibold" style="font-size:13px">Email</label>
             <input type="email" name="email" class="form-control"
                    value="{{ old('email') }}" placeholder="email@contoh.com" required>
@@ -94,20 +88,6 @@ function togglePassword(btn) {
         input.type = 'password';
         icon.classList.remove('bi-eye-slash');
         icon.classList.add('bi-eye');
-    }
-}
-
-function validateNik(input) {
-    input.value = input.value.replace(/\D/g, '');
-    const warning = input.nextElementSibling;
-    if (warning && warning.classList.contains('nik-warning')) {
-        if (input.value.length > 0 && input.value.length < 16) {
-            warning.classList.remove('d-none');
-            input.classList.add('is-invalid');
-        } else {
-            warning.classList.add('d-none');
-            input.classList.remove('is-invalid');
-        }
     }
 }
 </script>

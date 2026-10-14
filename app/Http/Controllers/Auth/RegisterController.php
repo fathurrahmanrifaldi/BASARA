@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -32,20 +33,16 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name'     => ['required', 'string', 'max:255'],
-            'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email'    => ['required', 'string', 'email', 'max:255', Rule::unique('users')->whereNotNull('email_verified_at')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'nik'      => ['required', 'string', 'size:16', 'unique:nasabah,nik'],
             'no_hp'    => ['nullable', 'string', 'max:15'],
             'alamat'   => ['nullable', 'string'],
         ], [
             'name.required'     => 'Nama lengkap wajib diisi.',
             'email.required'    => 'Alamat email wajib diisi.',
-            'email.unique'      => 'Email ini sudah terdaftar. Silakan gunakan email lain.',
+            'email.unique'      => 'Email ini sudah terdaftar dan terverifikasi. Silakan login.',
             'password.min'      => 'Password minimal 8 karakter.',
             'password.confirmed'=> 'Konfirmasi password tidak cocok.',
-            'nik.required'      => 'NIK wajib diisi.',
-            'nik.size'          => 'NIK harus tepat 16 digit.',
-            'nik.unique'        => 'NIK ini sudah terdaftar.',
         ]);
     }
 
@@ -79,19 +76,33 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user = User::create([
+        // Jika email sudah ada tapi belum terverifikasi (lolos validasi),
+        // perbarui akun tersebut alih-alih membuat baru.
+        $existing = User::where('email', $data['email'])
+            ->whereNull('email_verified_at')
+            ->where('role', 'nasabah')
+            ->first();
+
+        $attributes = [
             'name'     => $data['name'],
-            'email'    => $data['email'],
             'password' => Hash::make($data['password']),
             'role'     => 'nasabah',
             'status'   => 'approved', // langsung approved, gatekeeper adalah email verification
-        ]);
+        ];
 
-        $user->nasabah()->create([
-            'nik'    => $data['nik'],
+        $nasabahData = [
             'no_hp'  => $data['no_hp'] ?? null,
             'alamat' => $data['alamat'] ?? null,
-        ]);
+        ];
+
+        if ($existing) {
+            $existing->update($attributes);
+            $existing->nasabah()->updateOrCreate(['user_id' => $existing->id], $nasabahData);
+            return $existing;
+        }
+
+        $user = User::create($attributes + ['email' => $data['email']]);
+        $user->nasabah()->create($nasabahData);
 
         return $user;
     }

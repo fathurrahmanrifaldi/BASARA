@@ -26,15 +26,9 @@
                     <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label text-muted" style="font-size: 13px;">Email</label>
-                        <input type="email" class="form-control bg-light" value="{{ $user->email }}" disabled>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label text-muted" style="font-size: 13px;">NIK</label>
-                        <input type="text" class="form-control bg-light" value="{{ $nasabah->nik }}" disabled>
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label text-muted" style="font-size: 13px;">Email</label>
+                    <input type="email" class="form-control bg-light" value="{{ $user->email }}" disabled>
                 </div>
 
                 <div class="mb-3">

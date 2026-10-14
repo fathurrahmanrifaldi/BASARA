@@ -18,10 +18,9 @@ class LaporanController extends Controller {
             ->join('users', 'nasabah.user_id', '=', 'users.id')
             ->whereMonth('transaksi.tanggal', $bulan)
             ->whereYear('transaksi.tanggal', $tahun)
-            ->groupBy('nasabah.id', 'users.name', 'nasabah.nik')
+            ->groupBy('nasabah.id', 'users.name')
             ->select(
                 'users.name',
-                'nasabah.nik',
                 DB::raw('COUNT(transaksi.id) as jumlah_setor'),
                 DB::raw('SUM(transaksi.total_nilai) as total_nilai')
             )->get();
@@ -55,7 +54,6 @@ class LaporanController extends Controller {
             ->whereYear('penarikan_dana.tanggal_diminta', $tahun)
             ->select(
                 'users.name',
-                'nasabah.nik',
                 'penarikan_dana.jumlah',
                 'penarikan_dana.jenis',
                 'penarikan_dana.status',

@@ -7,8 +7,9 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Nasabah;
 
-// Halaman utama → redirect ke login
-Route::get('/', fn() => redirect()->route('login'));
+// Landing Page publik & detail artikel
+Route::get('/', [App\Http\Controllers\LandingController::class, 'index'])->name('landing');
+Route::get('/publikasi/{slug}', [App\Http\Controllers\LandingController::class, 'show'])->name('publikasi.show');
 
 // Auth routes dengan email verification diaktifkan
 Auth::routes(['verify' => true]);
@@ -48,7 +49,9 @@ Route::prefix('admin')
 
     // Transaksi
     Route::resource('transaksi', Admin\TransaksiController::class)
-        ->only(['index', 'create', 'store', 'show']);
+        ->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
+    Route::post('transaksi/import', [Admin\TransaksiController::class, 'importExcel'])
+        ->name('transaksi.import');
 
     // Penjualan ke Pengepul
     Route::resource('penjualan-pengepul', Admin\PenjualanPengepulController::class)
@@ -90,6 +93,10 @@ Route::prefix('super-admin')
 
     // Kategori Sampah (Super Admin juga bisa CRUD)
     Route::resource('kategori', SuperAdmin\KategoriController::class)
+        ->except(['show']);
+
+    // Kelola Publikasi & Informasi Landing Page
+    Route::resource('publikasi', SuperAdmin\PublikasiController::class)
         ->except(['show']);
 
     // Laporan

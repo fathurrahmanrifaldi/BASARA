@@ -71,16 +71,9 @@ body {
   <form method="POST" action="{{ route('register') }}">
     @csrf
     
-    <div class="row">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Nama Lengkap</label>
-          <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Nama Sesuai KTP" required autofocus>
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">NIK (16 Digit)</label>
-          <input type="text" name="nik" class="form-control" value="{{ old('nik') }}" placeholder="Contoh: 3201..." maxlength="16" required oninput="validateNik(this)">
-          <small class="text-danger d-none nik-warning">NIK harus tepat 16 digit angka.</small>
-        </div>
+    <div class="mb-3">
+      <label class="form-label">Nama Lengkap</label>
+      <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Nama Lengkap" required autofocus>
     </div>
 
     <div class="mb-3">
@@ -133,20 +126,6 @@ function togglePassword(btn) {
         input.type = 'password';
         icon.classList.remove('bi-eye-slash');
         icon.classList.add('bi-eye');
-    }
-}
-
-function validateNik(input) {
-    input.value = input.value.replace(/\D/g, ''); // hanya angka
-    const warning = input.nextElementSibling;
-    if (warning && warning.classList.contains('nik-warning')) {
-        if (input.value.length > 0 && input.value.length < 16) {
-            warning.classList.remove('d-none');
-            input.classList.add('is-invalid');
-        } else {
-            warning.classList.add('d-none');
-            input.classList.remove('is-invalid');
-        }
     }
 }
 </script>

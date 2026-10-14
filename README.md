@@ -59,5 +59,14 @@ Pengelolaan bank sampah secara manual sering kali menghadapi risiko kehilangan a
 
 ##  Hasil Pengujian & Implementasi
 
+
 - **Black-Box Testing:** 45 skenario uji fungsional berhasil diselesaikan dengan tingkat kelulusan **100%**.
 - **User Acceptance Testing (UAT):** Diuji langsung bersama pengurus RW dan perwakilan warga dengan tingkat penerimaan **100%** (25 skenario diterima) dan skor kepuasan rata-rata **4.5 / 5.0 (Sangat Baik)**.
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

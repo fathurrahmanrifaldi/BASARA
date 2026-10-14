@@ -81,17 +81,11 @@ body {
       <input type="email" class="form-control bg-light" value="{{ $googleData['email'] }}" disabled>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">NIK (16 Digit)</label>
-          <input type="text" name="nik" class="form-control" value="{{ old('nik') }}" placeholder="Contoh: 3201..." maxlength="16" required autofocus oninput="validateNik(this)">
-          <small class="text-danger d-none nik-warning">NIK harus tepat 16 digit angka.</small>
-    </div>
-
     <div class="row">
         <div class="col-md-6 mb-3">
           <label class="form-label">Buat Password</label>
           <div class="input-group">
-            <input type="password" name="password" class="form-control" placeholder="Minimal 8 karakter" required>
+            <input type="password" name="password" class="form-control" placeholder="Minimal 8 karakter" required autofocus>
             <button class="btn btn-outline-secondary" type="button" onclick="togglePassword(this)" style="border-color: #e2e8f0;">
                 <i class="bi bi-eye"></i>
             </button>
@@ -128,20 +122,6 @@ function togglePassword(btn) {
         input.type = 'password';
         icon.classList.remove('bi-eye-slash');
         icon.classList.add('bi-eye');
-    }
-}
-
-function validateNik(input) {
-    input.value = input.value.replace(/\D/g, ''); // hanya angka
-    const warning = input.nextElementSibling;
-    if (warning && warning.classList.contains('nik-warning')) {
-        if (input.value.length > 0 && input.value.length < 16) {
-            warning.classList.remove('d-none');
-            input.classList.add('is-invalid');
-        } else {
-            warning.classList.add('d-none');
-            input.classList.remove('is-invalid');
-        }
     }
 }
 </script>

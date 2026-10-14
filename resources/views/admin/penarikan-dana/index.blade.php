@@ -82,7 +82,6 @@
           <td style="color:#94a3b8;font-size:12px">{{ $p->id }}</td>
           <td>
             <div style="font-size:13px;font-weight:600">{{ $p->nasabah->user->name }}</div>
-            <div style="font-size:11px;color:#94a3b8">NIK: {{ $p->nasabah->nik }}</div>
           </td>
           <td style="font-weight:700;color:#16a34a;font-size:13px">
             Rp {{ number_format($p->jumlah, 0, ',', '.') }}
