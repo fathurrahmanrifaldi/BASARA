@@ -16,8 +16,13 @@ RUN npm run build
 # ==========================================
 # 2. Stage Dependencies (Composer)
 # ==========================================
-FROM composer:2 AS composer-stage
+FROM php:8.4-cli-alpine AS composer-stage
 WORKDIR /app
+
+RUN apk add --no-cache git unzip
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 COPY composer.json composer.lock ./
 RUN composer install \
@@ -25,7 +30,8 @@ RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
-    --no-scripts
+    --no-scripts \
+    --ignore-platform-reqs
 
 # ==========================================
 # 3. Stage Runtime (PHP 8.4-FPM + Nginx)
@@ -58,6 +64,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 
 # Install composer binary for utility in container
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Configure Nginx & Supervisord
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
