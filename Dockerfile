@@ -71,8 +71,13 @@ COPY docker/nginx.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/php.ini /usr/local/etc/php/conf.d/custom.ini
 
-# Match Nginx user to www-data
-RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf 2>/dev/null || true
+# Match Nginx user to www-data and ensure proper permissions for temp/log dirs
+RUN sed -i 's/user nginx;/user www-data;/' /etc/nginx/nginx.conf 2>/dev/null || true \
+    && mkdir -p /var/lib/nginx/tmp/client_body \
+                /var/lib/nginx/tmp/fastcgi \
+                /var/lib/nginx/tmp/proxy \
+                /var/log/nginx \
+    && chown -R www-data:www-data /var/lib/nginx /var/log/nginx
 
 WORKDIR /var/www/html
 

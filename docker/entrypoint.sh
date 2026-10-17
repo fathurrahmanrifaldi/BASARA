@@ -15,6 +15,11 @@ mkdir -p /var/www/html/storage/framework/cache/data \
          /var/www/html/bootstrap/cache
 
 # Fix ownership and permissions for runtime
+mkdir -p /var/lib/nginx/tmp/client_body \
+         /var/lib/nginx/tmp/fastcgi \
+         /var/lib/nginx/tmp/proxy \
+         /var/log/nginx
+chown -R www-data:www-data /var/lib/nginx /var/log/nginx
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
@@ -24,7 +29,8 @@ if [ ! -L /var/www/html/public/storage ]; then
     php artisan storage:link || true
 fi
 
-# Run database migrations if RUN_MIGRATIONS is set to true
+# Run database migrations (enabled by default)
+RUN_MIGRATIONS="${RUN_MIGRATIONS:-true}"
 if [ "$RUN_MIGRATIONS" = "true" ]; then
     echo "Running database migrations..."
     php artisan migrate --force || echo "Warning: Migration failed, continuing startup..."
