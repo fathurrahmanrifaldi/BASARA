@@ -1,4 +1,4 @@
-php@extends('layouts.super-admin')
+@extends('layouts.super-admin')
 @section('title', 'Tambah Petugas Lapangan')
 @section('page-title', 'Tambah Petugas Lapangan')
 

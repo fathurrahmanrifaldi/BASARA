@@ -13,15 +13,32 @@ class DatabaseSeeder extends Seeder {
             ['email' => 'ketuarw@basara.test'],
             [
                 'name'              => 'Ketua',
-                'password'          => Hash::make('password42'),
+                'password'          => Hash::make('password'),
                 'role'              => 'super_admin',
+                'status'            => 'aktif',
                 'email_verified_at' => now(),
-            ],
+            ]
+        );
+
+        // 2. Buat akun Petugas Lapangan (Admin / Staf)
+        User::firstOrCreate(
             ['email' => 'admin@basara.test'],
             [
                 'name'              => 'Admin',
                 'password'          => Hash::make('password'),
                 'role'              => 'admin',
+                'status'            => 'aktif',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'staf@basara.test'],
+            [
+                'name'              => 'Staf Lapangan',
+                'password'          => Hash::make('password'),
+                'role'              => 'admin',
+                'status'            => 'aktif',
                 'email_verified_at' => now(),
             ]
         );

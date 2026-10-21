@@ -36,6 +36,7 @@ class KelolaAdminController extends Controller
             'email'             => $request->email,
             'password'          => Hash::make($request->password),
             'role'              => 'admin',
+            'status'            => 'aktif',
             'email_verified_at' => now(), // Langsung terverifikasi — dibuat oleh Super Admin
         ]);
 
