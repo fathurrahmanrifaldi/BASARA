@@ -2,21 +2,18 @@
 namespace App\Http\Controllers\Nasabah;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Transaksi, DetailTransaksi, Penilaian};
+use App\Models\{Transaksi, DetailTransaksi, Penilaian, Nasabah};
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $nasabah = auth()->user()->nasabah;
+        $nasabah = auth()->user()->nasabah ?? Nasabah::firstOrCreate(
+            ['user_id' => auth()->id()],
+            ['saldo' => 0]
+        );
         $now     = Carbon::now();
-
-        // Jika nasabah belum punya data, redirect dengan pesan
-        if (!$nasabah) {
-            return redirect()->route('nasabah.complete-profile')
-                ->with('warning', 'Harap lengkapi profil Anda terlebih dahulu.');
-        }
 
         $totalTransaksi = $nasabah->transaksi()->count();
 

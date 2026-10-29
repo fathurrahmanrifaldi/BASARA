@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Nasabah;
 
 use App\Http\Controllers\Controller;
 use App\Models\PenarikanDana;
+use App\Models\Nasabah;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -13,12 +14,10 @@ class PenarikanDanaController extends Controller
      */
     public function index()
     {
-        $nasabah = auth()->user()->nasabah;
-
-        if (!$nasabah) {
-            return redirect()->route('nasabah.complete-profile')
-                ->with('warning', 'Harap lengkapi profil Anda terlebih dahulu.');
-        }
+        $nasabah = auth()->user()->nasabah ?? Nasabah::firstOrCreate(
+            ['user_id' => auth()->id()],
+            ['saldo' => 0]
+        );
 
         $penarikan = $nasabah->penarikanDana()
             ->latest()
@@ -37,11 +36,10 @@ class PenarikanDanaController extends Controller
      */
     public function create()
     {
-        $nasabah = auth()->user()->nasabah;
-
-        if (!$nasabah) {
-            return redirect()->route('nasabah.complete-profile');
-        }
+        $nasabah = auth()->user()->nasabah ?? Nasabah::firstOrCreate(
+            ['user_id' => auth()->id()],
+            ['saldo' => 0]
+        );
 
         // Tidak boleh ajukan baru jika masih ada yang menunggu
         $adaMenunggu = $nasabah->penarikanDana()
@@ -61,11 +59,10 @@ class PenarikanDanaController extends Controller
      */
     public function store(Request $request)
     {
-        $nasabah = auth()->user()->nasabah;
-
-        if (!$nasabah) {
-            return redirect()->route('nasabah.complete-profile');
-        }
+        $nasabah = auth()->user()->nasabah ?? Nasabah::firstOrCreate(
+            ['user_id' => auth()->id()],
+            ['saldo' => 0]
+        );
 
         // Cek duplikasi menunggu
         if ($nasabah->penarikanDana()->where('status', 'menunggu')->exists()) {

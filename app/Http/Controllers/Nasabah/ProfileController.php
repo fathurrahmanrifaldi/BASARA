@@ -14,6 +14,10 @@ class ProfileController extends Controller
     /** Form Lengkapi Profil dari Google OAuth */
     public function completeProfileForm()
     {
+        if (auth()->check()) {
+            return redirect()->route('nasabah.dashboard');
+        }
+
         if (!session()->has('google_registration')) {
             return redirect()->route('login');
         }
@@ -24,6 +28,10 @@ class ProfileController extends Controller
     /** Simpan profil dari Google OAuth */
     public function completeProfileStore(Request $request)
     {
+        if (auth()->check()) {
+            return redirect()->route('nasabah.dashboard');
+        }
+
         if (!session()->has('google_registration')) {
             return redirect()->route('login');
         }
@@ -83,7 +91,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
-        $nasabah = $user->nasabah;
+        $nasabah = $user->nasabah ?? Nasabah::firstOrCreate(['user_id' => $user->id], ['saldo' => 0]);
         return view('nasabah.profil', compact('user', 'nasabah'));
     }
 
@@ -91,7 +99,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $user = auth()->user();
-        $nasabah = $user->nasabah;
+        $nasabah = $user->nasabah ?? Nasabah::firstOrCreate(['user_id' => $user->id], ['saldo' => 0]);
 
         $request->validate([
             'name' => 'required|string|max:255',

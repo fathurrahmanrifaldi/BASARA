@@ -2,12 +2,16 @@
 namespace App\Http\Controllers\Nasabah;
 
 use App\Http\Controllers\Controller;
+use App\Models\Nasabah;
 
 class RiwayatController extends Controller
 {
     public function index()
     {
-        $nasabah = auth()->user()->nasabah;
+        $nasabah = auth()->user()->nasabah ?? Nasabah::firstOrCreate(
+            ['user_id' => auth()->id()],
+            ['saldo' => 0]
+        );
 
         $transaksi = $nasabah->transaksi()
             ->with('detail.kategori')
